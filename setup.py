@@ -19,7 +19,7 @@ setup(
     author_email=about['__author_email__'],
     maintainer=about['__maintainer__'],
     maintainer_email=about['__maintainer_email__'],
-    packages=['simple_salesforce',],
+    packages=['simple_salesforce', 'simple_salesforce.aio'],
     url=about['__url__'],
     license=about['__license__'],
     description=about['__description__'],
