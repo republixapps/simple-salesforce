@@ -262,9 +262,11 @@ class AsyncSalesforce:
             )
         if self._session:
             return self._session
-        elif self._proxies:
-            return httpx.AsyncClient(proxies=self._proxies)
-        return httpx.AsyncClient()
+        if self._proxies:
+            self._session = httpx.AsyncClient(proxies=self._proxies)
+        else:
+            self._session = httpx.AsyncClient()
+        return self._session
 
     async def describe(self, **kwargs):
         """Describes all available objects
@@ -274,7 +276,9 @@ class AsyncSalesforce:
         * keyword arguments supported by requests.request (e.g. json, timeout)
         """
         url = self.base_url + "sobjects"
-        result = await self._call_salesforce('GET', url, name='describe', **kwargs)
+        result = await self._call_salesforce(
+            'GET', url, name='describe', **kwargs
+        )
 
         json_result = result.json(object_pairs_hook=OrderedDict)
         if len(json_result) == 0:
@@ -607,10 +611,9 @@ class AsyncSalesforce:
         headers = self.headers.copy()
         additional_headers = kwargs.pop('headers', dict())
         headers.update(additional_headers)
-        async with self.session as client:
-            result = await client.request(
-                method, url, headers=headers, **kwargs
-            )
+        result = await self.session.request(
+            method, url, headers=headers, **kwargs
+        )
 
         if result.status_code >= 300:
             exception_handler(result, name=name)
@@ -1002,10 +1005,9 @@ class AsyncSFType:
         }
         additional_headers = kwargs.pop('headers', dict())
         headers.update(additional_headers or dict())
-        async with self.session as client:
-            result = await client.request(
-                method, url, headers=headers, **kwargs
-            )
+        result = await self.session.request(
+            method, url, headers=headers, **kwargs
+        )
 
         if result.status_code >= 300:
             exception_handler(result, self.name)
