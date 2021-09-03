@@ -182,12 +182,12 @@ class SessionMixin:
         Offer users a method to _close_ a session.
         """
         if (
-            hasattr(self._session)
+            getattr(self, "_session")
             and self._session
             and hasattr(self._session, "aclose")
         ):
             await self._session.aclose()
-            self.session = None
+            self._session = None
 
     @property
     def session(self):
