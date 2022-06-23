@@ -18,7 +18,7 @@ async def call_salesforce(
     Returns a `httpx.Response` object.
     """
     if not async_client:
-        async_client = httpx.AsyncClient()
+        async_client = kwargs.pop('session', httpx.AsyncClient())
 
     headers = headers or dict()
     additional_headers = kwargs.pop("additional_headers", dict())
