@@ -25,7 +25,6 @@ async def test_default_domain_success(constants, mock_httpx_client):
     mock_client.custom_session_attrib = "X-1-2-3"
 
     (session_id, instance_url) = await AsyncSalesforceLogin(
-        session=mock_client,
         username="foo@bar.com",
         password="password",
         security_token="token",
@@ -49,7 +48,6 @@ async def test_custom_domain_success(constants, mock_httpx_client):
     mock_client.custom_session_attrib = "X-1-2-3"
 
     (session_id, instance_url) = await AsyncSalesforceLogin(
-        session=mock_client,
         username="foo@bar.com",
         password="password",
         domain="testdomain.my",
@@ -59,7 +57,7 @@ async def test_custom_domain_success(constants, mock_httpx_client):
     assert len(mock_client.method_calls) == 1
     call = mock_client.method_calls[0]
     assert call[0] == "post"
-    assert call[1][0] == ("https://testdomain.my.salesforce.com/services/Soap/u/42.0")
+    assert call[1][0] == ("https://testdomain.my.salesforce.com/services/Soap/u/52.0")
     assert "SOAPAction" in call[2]["headers"]
     assert call[2]["headers"]["SOAPAction"] == "login"
 
@@ -92,7 +90,6 @@ async def test_failure(mock_httpx_client):
 
     with pytest.raises(SalesforceAuthenticationFailed):
         await AsyncSalesforceLogin(
-            session=mock_client,
             username="foo@bar.com",
             password="password",
             security_token="token",
@@ -130,7 +127,6 @@ async def test_token_login_success_with_key_file(
     inner(happy_result)
 
     (session_id, instance_url) = await AsyncSalesforceLogin(
-        session=mock_client,
         username="foo@bar.com",
         consumer_key="12345.abcde",
         privatekey_file=sample_key_filepath,
@@ -157,7 +153,6 @@ async def test_token_login_success_with_key_string(
     )
     inner(happy_result)
     (session_id, instance_url) = await AsyncSalesforceLogin(
-        session=mock_client,
         username="foo@bar.com",
         consumer_key="12345.abcde",
         privatekey=sample_key.decode(),
@@ -185,7 +180,6 @@ async def test_token_login_success_with_key_bytes(
     )
     inner(happy_result)
     (session_id, instance_url) = await AsyncSalesforceLogin(
-        session=mock_client,
         username="foo@bar.com",
         consumer_key="12345.abcde",
         privatekey=sample_key,
@@ -220,7 +214,6 @@ async def test_token_login_failure(mock_httpx_client, sample_key_filepath):
 
     with pytest.raises(SalesforceAuthenticationFailed):
         await AsyncSalesforceLogin(
-            session=mock_client,
             username="foo@bar.com",
             consumer_key="12345.abcde",
             privatekey_file=sample_key_filepath,
@@ -255,7 +248,6 @@ async def test_token_login_failure_with_warning(
     with warnings.catch_warnings(record=True) as warning:
         with pytest.raises(SalesforceAuthenticationFailed):
             await AsyncSalesforceLogin(
-                session=mock_client,
                 username="foo@bar.com",
                 consumer_key="12345.abcde",
                 privatekey_file=sample_key_filepath,
