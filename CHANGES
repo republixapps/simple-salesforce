@@ -1,3 +1,49 @@
+v1.12.1
+======
+Fix pylint errors and build errors on Travis-CI
+
+Bugs
+--------
+- Issue #557 - SFType arguments were re-arranged from v1.11.5 causing failure for some users explicitly calling SFType and using default arguement position
+
+v1.12.0
+======
+Drop support for Python 3.5
+
+Features
+--------
+- [#507] Added automatic session refresh
+- [#546] Added dynamic sized batches to respect bulk api limits
+- [#548] Added optional dict flag for results returned in queries
+- [#550] Added support for OAuth2 endpoints
+
+v1.11.5
+======
+Hotfix missing wsdl file
+
+Bugs
+--------
+- Issue #533 Fix missing metadata.wsdl file
+
+v1.11.5
+======
+Changes as of 2022-01-05
+
+Bugs
+--------
+- [#518] Fix hanging batch results in bulk api
+
+Features
+--------
+- [#475] Added support for all metadata api operations
+- [#485] Added base64 function to support upload, update, and get
+
+Other
+--------
+- [#495] Add parse_float to allow parsing of floats to decimal.Decimal
+- [#512] Updated README information for JWT Token
+
+
 v1.11.4
 ======
 Changes as of 2021-09-09
